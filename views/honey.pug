@@ -4,12 +4,12 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  - var results = [{name:"Manukahoney", description: "Native", price:12}, {name:"Monofloralhoney", description: "Delicatehoney", price:13},{name:"Acacia", description: "includeclover", price:14}]
+  - var results = theHoney
   div(class="container-fluid") 
   div(class="row")
   -
   each item,index in results
-    div(class="col-sm-2 "  onclick=`buy(${index})`) #{item.name} - #{item.type} - #{item.price} 
+    div(class="col-sm-2 "  onclick=`buy(${index})`) #{item.name} - #{item.description} - #{item.price} 
   script.
     function buy(itemNo){
       alert(`You purchased Item ${itemNo+1}`)

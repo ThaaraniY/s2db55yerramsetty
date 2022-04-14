@@ -6,9 +6,30 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var honeyRouter = require('./routes/honey'); 
+var honeyRouter = require('./routes/honey');
 var addmobRouter = require('./routes/addmods');
-var selectorRouter = require('./routes/selector'); 
+var selectorRouter = require('./routes/selector');
+var resourceRouter = require('./routes/resource');
+var Honey = require("./models/honey");
+
+
+const connectionString =
+  process.env.MONGO_CON
+mongoose = require('mongoose');
+mongoose.connect(connectionString,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
+
+//Get the default connection 
+var db = mongoose.connection;
+
+//Bind connection to error event  
+db.on('error', console.error.bind(console, 'MongoDB connection error: '));
+db.once("open", function () {
+  console.log("Connection to DB succeeded")
+});
 
 var app = express();
 
@@ -27,14 +48,58 @@ app.use('/users', usersRouter);
 app.use('/honey', honeyRouter);
 app.use('/addmods', addmobRouter);
 app.use('/selector', selectorRouter);
+app.use('/resource', resourceRouter);
+
+
+// We can seed the collection if needed on 
+//server start 
+async function recreateDB() {
+  // Delete everything 
+  await Honey.deleteMany();
+
+  let instance1 = new
+    Honey({
+      name: "Manukahoney", description: 'Native',
+      price: 12
+    });
+  instance1.save(function (err, doc) {
+    if (err) return console.error(err);
+    console.log("First object saved")
+  });
+
+
+  let instance2 = new
+    Honey({
+      name: "Monofloralhoney", description: 'Delicatehoney',
+      price: 13
+    });
+  instance2.save(function (err, doc) {
+    if (err) return console.error(err);
+    console.log("Second object saved")
+  });
+
+  let instance3 = new
+    Honey({
+      name: "Acacia", description: 'includeclover',
+      price: 14
+    });
+  instance3.save(function (err, doc) {
+    if (err) return console.error(err);
+    console.log("Third object saved")
+  });
+}
+
+let reseed = true;
+if (reseed) { recreateDB(); }
+
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
