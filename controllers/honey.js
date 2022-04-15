@@ -1,3 +1,4 @@
+const honey = require('../models/honey');
 var Honey = require('../models/honey'); 
  
 // List of all Honey
@@ -13,9 +14,19 @@ exports.honey_list = async function(req, res) {
 };  
  
 // for a specific Costume. 
-exports.honey_detail = function(req, res) { 
-    res.send('NOT IMPLEMENTED: Honey detail: ' + req.params.id); 
-}; 
+exports.honey_detail =async function(req, res) { 
+   // for a specific Costume. 
+
+    console.log("detail"  + req.params.id) 
+    try { 
+        result = await honey.findById( req.params.id) 
+        res.send(result) 
+    } 
+    catch (error) { 
+        res.status(500) 
+        res.send(`{"error": document for id ${req.params.id} not found`);  
+     } 
+} 
  
 
  
