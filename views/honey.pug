@@ -1,17 +1,33 @@
 extends layout
 
-
 block content
   h1= title
-  p Welcome to #{title}
-  - var results = theHoney
-  div(class="container-fluid") 
-  div(class="row")
-  -
-  each item,index in results
-    div(class="col-sm-2 "  onclick=`buy(${index})`) #{item.name} - #{item.description} - #{item.price} 
+  - let honeys=results
+  - let destinationcreate = `dispatchCreate(\"/honeys/create\")`
+  div(class="container-fluid")
+    button.btn( class="btn-primary ml-1 btn-lg", onclick= destinationcreate) Create
+  div(class="row m-1")
+   
+    each honey,index in honeys 
+      - let destinationupdate = `dispatch(\"/honeys/update?id=${honey._id}\")`
+      -let destinationdetail =   `dispatch(\"/honeys/detail?id=${honey._id}\")`
+      - let destinationdelete = `dispatchDelete(\"/honeys/delete?id=${honey._id}\")`
+        div(class="col-sm-4  m-1" style=("font-weight:bolder")) #{honey.name} - #{honey.description} - #{honey.price}
+          button.btn( class="btn-success ml-1", onclick= destinationdetail) Detail
+          button.btn( class="btn-info ml-1", onclick= destinationupdate) Update
+          button.btn( class="btn-danger ml-1", onclick= destinationdelete) Delete
   script.
-    function buy(itemNo){
-      alert(`You purchased Item ${itemNo+1}`)
-    } 
-  
+      function dispatch(path){
+      window.location.href=path
+      }
+      
+      function ride(rides)
+      {
+        alert(`your booking rides count: ${rides+1}`)
+      }
+      function dispatchCreate(path){
+        window.location.href=path
+      }
+      function dispatchDelete(path){
+        window.location.href=path
+      }

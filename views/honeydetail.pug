@@ -1,0 +1,23 @@
+extends layout  
+block content 
+    h1= title 
+        if (toShow == null)
+          h2 No instancve to view details 
+      else
+          - let honeyid = toShow._id 
+          - let name  = toShow.name 
+          - let description = toShow.description
+          - let price = toShow.price 
+          div 
+              div.row 
+                  div(class='honeyAttr mr-3') honey ID is: 
+                  div(class='values') #{id} honey
+              div.row 
+                  -div(class='honeyAttr mr-3') honey name is: 
+                  div(class='values') #{name} 
+              div.row 
+                  div(class='honeyAttr mr-3') honey description is: 
+                  div(class='values') #{description} 
+              div.row 
+                  div(class='honeyAttr mr-3') honey price is: 
+                  div(class='values') #{price} 
